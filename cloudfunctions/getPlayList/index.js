@@ -74,7 +74,8 @@ exports.main = async (event, context) => {
      for (let i = 0; i < addMusicList.length;i++) {
        const addRes = await db.collection('playlist').add({
          data: {
-           ...addMusicList[i]
+           ...addMusicList[i],
+           createTime: db.serverDate()
          }    
        })
        console.log('addRes', addRes)
