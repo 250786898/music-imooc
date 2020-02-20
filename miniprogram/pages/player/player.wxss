@@ -1,0 +1,80 @@
+/* miniprogram/pages/player/player.wxss */
+.player-container {
+  width: 100vw;
+  height: 100vh;
+  filter: blur(40rpx);
+  opacity: 0.5;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.player-mask {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #222;
+  z-index: -2;
+}
+.player-disc{
+  width: 592rpx;
+  height: 592rpx;
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%,140rpx);
+  background: url('https://s3.music.126.net/mobile-new/img/disc.png?d3bdd1080a72129346aa0b4b4964b75f=') no-repeat center/contain;
+}
+.player-img{
+  width: 368rpx;
+  height: 368rpx;
+  border-radius: 50%;
+}
+
+.needle-img{
+  width: 192rpx;
+  height: 274rpx;
+  position: absolute;
+  top: -150rpx;
+  left: 266rpx;
+  z-index: 2;
+  transform: rotate(-15deg);
+}
+
+.player-disc::after {
+  content: '';
+  width: 192rpx;
+  height: 274rpx;
+  position: absolute;
+  top: -150rpx;
+  left: 266rpx;
+  background: url('https://s3.music.126.net/m/s/img/needle.png?702cf6d95f29e2e594f53a3caab50e12') no-repeat center/contain;
+  transform: rotate(-15deg);
+}
+
+/* 控制面板 */
+.control{
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.control .iconfont {
+  color: #fefefe;
+}
+
+.icon-shangyishoushangyige, .icon-xiayigexiayishou {
+  font-size: 80rpx;
+}
+
+.icon-bofang1, .icon-zanting1 {
+  font-size: 120rpx;
+  margin: 0 50rpx;
+}

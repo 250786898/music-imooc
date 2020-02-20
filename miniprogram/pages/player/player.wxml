@@ -1,0 +1,19 @@
+<view class="player-container" style="background:url({{picUrl}}) center/cover no-repeat;"></view>
+<view class="player-mask"></view>
+<!-- <image src="https://s3.music.126.net/m/s/img/needle.png?702cf6d95f29e2e594f53a3caab50e12" class="needle-img"></image> -->
+
+<view class="player-info">
+  <!-- 封面信息 -->
+    <view class="player-disc">
+      <image class="player-img" src="{{picUrl}}" mode="widthFix" lazy-load="false">  
+      </image>
+    </view>
+
+    <!-- 音乐控制面板 -->
+    <view class="control">
+      <text class="iconfont icon-shangyishoushangyige" bind:tap="onPrev"></text>
+      <text class="iconfont icon-zanting1"></text>
+      <text class="iconfont icon-xiayigexiayishou" bind:tap="onNext"></text>
+    </view>
+       
+</view>
