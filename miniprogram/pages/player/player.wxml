@@ -4,15 +4,19 @@
 
 <view class="player-info">
   <!-- 封面信息 -->
-    <view class="player-disc">
-      <image class="player-img" src="{{picUrl}}" mode="widthFix" lazy-load="false">  
+    <view class="player-disc {{isplaying ? 'playing' : ''}}">
+      <image class="player-img disc-animation {{isplaying ? '' : 'disc-pause'}}" src="{{picUrl}}" mode="widthFix" lazy-load="false">  
       </image>
     </view>
+
+    <!-- 进度条 -->
+
+    <music-progress class="progress" bind:onMusicEnd="onNext"/>
 
     <!-- 音乐控制面板 -->
     <view class="control">
       <text class="iconfont icon-shangyishoushangyige" bind:tap="onPrev"></text>
-      <text class="iconfont icon-zanting1"></text>
+      <text class="iconfont {{isplaying ? 'icon-zanting1' : 'icon-bofang1'}}" bind:tap="togglePlayState"></text>
       <text class="iconfont icon-xiayigexiayishou" bind:tap="onNext"></text>
     </view>
        

@@ -32,9 +32,28 @@ exports.main = async (event, context) => {
       ctx.body = JSON.parse(res)
     }catch (err) {
       console.log(err)
+    }   
+  })
+
+
+  //获取音乐详情
+  app.router('musicDetail', async (ctx, next) => {
+    try {
+      const res = await rp(`${BASE_URL}/song/detail?ids=${event.musicId}`)
+      ctx.body = JSON.parse(res)
+    } catch (error) {
+      console.log(err)
     }
-    
-    
+  })
+
+  //获取音乐播放地址
+  app.router('getMusicUrl', async (ctx, next) => {
+    try {
+      const res = await rp(`${BASE_URL}/song/url?id=${event.musicId}`)
+      ctx.body = JSON.parse(res)
+    } catch (error) {
+      console.log(err)
+    }
   })
 
   return app.serve()  

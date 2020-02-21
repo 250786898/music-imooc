@@ -33,8 +33,21 @@ Page({
           name: pl.name,
         }
       })
+      this.savePlayMusicListToStorage(pl.tracks)
       wx.hideLoading()
     })
+  },
+
+  /**
+   * 
+   * @param {Array} musicList 歌单列表
+   */
+  savePlayMusicListToStorage (musicList) {
+    wx.setStorage({
+      key: 'musicList',
+      data: musicList,
+    })
+      
   },
 
   /**

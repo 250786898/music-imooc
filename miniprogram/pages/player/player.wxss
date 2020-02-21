@@ -29,22 +29,30 @@
   transform: translate(-50%,140rpx);
   background: url('https://s3.music.126.net/mobile-new/img/disc.png?d3bdd1080a72129346aa0b4b4964b75f=') no-repeat center/contain;
 }
+
+@keyframes music-disc-play{
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.disc-animation {
+  animation: music-disc-play 12s linear infinite;
+}
+
+.disc-pause {
+  animation-play-state: paused;
+}
 .player-img{
   width: 368rpx;
   height: 368rpx;
   border-radius: 50%;
 }
 
-.needle-img{
-  width: 192rpx;
-  height: 274rpx;
-  position: absolute;
-  top: -150rpx;
-  left: 266rpx;
-  z-index: 2;
-  transform: rotate(-15deg);
-}
-
+/* 播放句柄 */
 .player-disc::after {
   content: '';
   width: 192rpx;
@@ -54,6 +62,20 @@
   left: 266rpx;
   background: url('https://s3.music.126.net/m/s/img/needle.png?702cf6d95f29e2e594f53a3caab50e12') no-repeat center/contain;
   transform: rotate(-15deg);
+  transition: .5s linear;
+}
+
+.playing::after {
+  transform: rotate(0deg);
+}
+
+/* 进度条 */
+.progress{
+  width: 90%;
+  position: absolute;
+  bottom: 300rpx;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* 控制面板 */
