@@ -3,6 +3,8 @@
 // properties(src(m4a, aac, mp3, wav),startTime,title,epname,singer,coverImgUrl,webUrl,protocol)
 const backAudioManager = wx.getBackgroundAudioManager()  
 let currentPlayTime = -1 //当前音乐播放处于的秒数
+let movableViewWidth = 0 //进度球总宽度
+let movableViewArea = 0 //进度总面积宽度
 Component({
   /**
    * 组件的属性列表
@@ -17,12 +19,15 @@ Component({
     time: { //音乐播放时间
       start: '00:00', //开始播放时间
       end: '00:00'  //结束播放得时间
-    }
+    },
+    musicProgress: 0 ,//当前音乐进度:百分比0~100
+    movableDistance: 0 //当前移动view的位置
   },
 
   lifetimes: {
     ready() {
       // this.setMusicTime()
+      this._setMovableWidth()
       this._bindBGMEvent()
     }
   },
@@ -31,6 +36,20 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    /**
+     * @description 设置移动设备宽度
+     */
+    _setMovableWidth () {
+        const query = wx.createSelectorQuery().in(this)
+        query.select('.movable-area').boundingClientRect()
+        query.select('.movable-view').boundingClientRect()
+        query.exec((res) =>{
+         console.log('_setMovableWidth',res)
+        })
+     
+
+    },
+
     /**
      * @description 绑定背景音频管理器时间
      */
@@ -85,7 +104,7 @@ Component({
 
       // 监听背景音频播放进度更新事件，只有小程序在前台时会回调。
       backAudioManager.onTimeUpdate(() =>{
-        this._updateCurrentTime()
+        this._updateCurrentTimeAndProgress()
       })
 
       // 监听用户在系统音乐播放面板点击下一曲事件（仅iOS）
@@ -99,19 +118,23 @@ Component({
       })
     },
 
+
     /**
-     * @description 更新当前时间
+     * @description 更新当前时间和进度条
      */
-    _updateCurrentTime () {
-      const currentTime = backAudioManager.currentTime
+    _updateCurrentTimeAndProgress () {
+      let currentTime = backAudioManager.currentTime
+      let duration = backAudioManager.duration
       let showTime = this.formatTime(currentTime)
       let currentManagerTime = parseInt(currentTime)
+      let cuttrntProgress = ( currentTime / duration ) * 100
       if(currentPlayTime != currentManagerTime ) {
         //当前时间未设置更新渲染，优化一秒只渲染一次的问题
         console.log('onTimeUpdate',currentTime)
         currentPlayTime = currentManagerTime
         this.setData({
-          ['time.start']:`${showTime.min}:${showTime.sec}`
+          ['time.start']:`${showTime.min}:${showTime.sec}`,
+          musicProgress: cuttrntProgress
         })
       }
       
