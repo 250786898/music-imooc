@@ -134,6 +134,21 @@ Page({
     }
   },
 
+  onPlayState () {
+    this.setData({
+      isplaying: true
+    })
+  },
+
+  /**
+   * @description 切换为暂停状态
+   */
+  onPauseState () {
+    this.setData({
+      isplaying: false
+    })
+  },
+
   /**
    * @description 切换播放状态
    */

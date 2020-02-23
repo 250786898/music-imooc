@@ -6,6 +6,8 @@
         class="movable-view" 
         direction="horizontal"
         x="{{movableDistance}}"
+        bindchange="changeMovaleView"
+        bindtouchend="movalieMoveEnd"
       >
       </movable-view>
     </movable-area> 

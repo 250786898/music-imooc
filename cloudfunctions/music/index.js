@@ -56,6 +56,16 @@ exports.main = async (event, context) => {
     }
   })
 
+  //获取音乐播放的歌词
+  app.router('getMusicLyric', async (ctx, next) => {
+    try {
+      const res = await rp(`${BASE_URL}/lyric?id=${event.musicId}`)
+      ctx.body = JSON.parse(res)
+    } catch (error) {
+      console.log(err)
+    }
+  })
+
   return app.serve()  
  
 

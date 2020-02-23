@@ -3,8 +3,9 @@
 // properties(src(m4a, aac, mp3, wav),startTime,title,epname,singer,coverImgUrl,webUrl,protocol)
 const backAudioManager = wx.getBackgroundAudioManager()  
 let currentPlayTime = -1 //当前音乐播放处于的秒数
-let movableViewWidth = 0 //进度球总宽度
-let movableViewArea = 0 //进度总面积宽度
+let movalieWidth = 0 //进度条可移动总宽度
+let movalieXDistance = 0 //拖拽的X位置
+let movalieLock = false //拖拽音乐锁： 防止推拽过程同时被监听进度修改，造成抖动感觉
 Component({
   /**
    * 组件的属性列表
@@ -45,6 +46,11 @@ Component({
         query.select('.movable-view').boundingClientRect()
         query.exec((res) =>{
          console.log('_setMovableWidth',res)
+         if(res) {
+          let movableAreaWidth = res[0].width
+          let movableViewWidth = res[1].width
+          movalieWidth = movableAreaWidth - movableViewWidth 
+         }     
         })
      
 
@@ -72,12 +78,14 @@ Component({
       //监听背景音频播放事件
       backAudioManager.onPlay(() => {
         console.log('onPlay')
+        this.triggerEvent('onPlayState')
         this.setMusicTime()
       })
 
       //监听背景音频暂停事件
       backAudioManager.onPause(() =>{
-        console.log('onPause')
+        this.triggerEvent('onPauseState')
+        console.log('onPause1')
       })
 
       //监听背景音频开始跳转操作事件
@@ -118,25 +126,64 @@ Component({
       })
     },
 
+    changeMovaleView (e) {
+      // console.log('changeMovaleView',e)
+      if(e.detail.source == 'touch') { //source 表示产生移动的原因
+        movalieLock = true //移动开始先上锁   
+        movalieXDistance = e.detail.x //当前拖拽的位置
+      }
+    
+      
+    },
+
+    movalieMoveEnd () {
+      //手机拖拽移动结束赋值
+      
+      let duration = backAudioManager.duration
+      const movaliePercent =  movalieXDistance / movalieWidth 
+      let seekSecond = movaliePercent * duration //跳转到指定位置秒数 = 当前处于的（X值 / 总移动距离） * 总时长
+      const musicProgress = movaliePercent * 100 //修改进度进度
+      const startTimeObj = this.formatTime(seekSecond)
+      backAudioManager.seek(seekSecond)  //播放跳转到拖拽的时间
+      
+    
+      this.setData({
+        movableDistance: movalieXDistance,
+        ['time.start']: `${startTimeObj.min}:${startTimeObj.sec}`,
+        musicProgress
+      })
+      
+     
+      movalieLock = false //移动结束解锁
+      console.log('movalieMoveEnd',movalieLock)
+    },
+
 
     /**
      * @description 更新当前时间和进度条
      */
     _updateCurrentTimeAndProgress () {
-      let currentTime = backAudioManager.currentTime
-      let duration = backAudioManager.duration
-      let showTime = this.formatTime(currentTime)
-      let currentManagerTime = parseInt(currentTime)
-      let cuttrntProgress = ( currentTime / duration ) * 100
-      if(currentPlayTime != currentManagerTime ) {
-        //当前时间未设置更新渲染，优化一秒只渲染一次的问题
-        console.log('onTimeUpdate',currentTime)
-        currentPlayTime = currentManagerTime
-        this.setData({
-          ['time.start']:`${showTime.min}:${showTime.sec}`,
-          musicProgress: cuttrntProgress
-        })
-      }
+      // console.log('movalieLock',movalieLock)
+
+      if (!movalieLock) { //只有没有拖拽进度的时候会跟更新
+        let currentTime = backAudioManager.currentTime
+        let duration = backAudioManager.duration
+        let showTime = this.formatTime(currentTime)
+        let currentManagerTime = parseInt(currentTime)
+        let cuttrntProgress = ( currentTime / duration ) * 100
+        const movableDistance =  movalieWidth * (currentTime / duration) //拖拽球移动的距离 = 进度条总长度 * （当前播放时间 / 音乐总时长）
+        if(currentPlayTime != currentManagerTime ) {
+          //当前时间未设置更新渲染，优化一秒只渲染一次的问题
+          // console.log('onTimeUpdate',currentTime)
+          currentPlayTime = currentManagerTime
+          
+          this.setData({
+            ['time.start']:`${showTime.min}:${showTime.sec}`,
+            musicProgress: cuttrntProgress,
+            movableDistance
+          })
+        }
+      } 
       
     },
 

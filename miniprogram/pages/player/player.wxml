@@ -8,10 +8,13 @@
       <image class="player-img disc-animation {{isplaying ? '' : 'disc-pause'}}" src="{{picUrl}}" mode="widthFix" lazy-load="false">  
       </image>
     </view>
+   
+   <!-- 歌词组件 -->
+    <lyric />
 
     <!-- 进度条 -->
 
-    <music-progress class="progress" bind:onMusicEnd="onNext"/>
+    <music-progress class="progress" bind:onMusicEnd="onNext" bind:onPauseState="onPauseState" bind:onPlayState="onPlayState"/>
 
     <!-- 音乐控制面板 -->
     <view class="control">
