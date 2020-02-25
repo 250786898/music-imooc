@@ -10,7 +10,7 @@
     </view>
    
    <!-- 歌词组件 -->
-    <lyric />
+    <lyric class="lyric" />
 
     <!-- 进度条 -->
 

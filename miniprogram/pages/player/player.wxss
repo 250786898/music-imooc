@@ -46,6 +46,16 @@
 .disc-pause {
   animation-play-state: paused;
 }
+
+.player-info {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
 .player-img{
   width: 368rpx;
   height: 368rpx;
