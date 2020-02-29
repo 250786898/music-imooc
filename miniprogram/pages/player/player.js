@@ -10,7 +10,9 @@ Page({
    */
   data: {
     picUrl: '', //背景图片
-    isplaying: false //是否处于播放状态
+    isplaying: false, //是否处于播放状态
+    isShowLyric: false, //是否显示歌词
+    lyric: '' //歌词
   },
 
   /**
@@ -20,6 +22,15 @@ Page({
     console.log('options', options)
     this.setPlayMusic(options.index)
     this.loadDetailInfoByMusicId(options.musicId)
+  },
+
+  /**
+   * @description 切换歌词显示状态
+   */
+  toggleShowLyric () {
+    this.setData({
+      isShowLyric: !this.data.isShowLyric
+    })
   },
 
   /**
@@ -46,7 +57,7 @@ Page({
     })
     console.log('loadDetailInfoByMusicId', res)
     this.loadAndSetMusicInfo(musicId,al,ar)
-
+    this.loadLyric(musicId)
   },
 
   /**
@@ -55,6 +66,35 @@ Page({
    */
   setPlayMusic(index) {
     currentPlayIndex = index
+  },
+
+  timeUpdate (event) {
+    this.selectComponent('.lyric').update(event.detail.currentTime)
+  },
+
+  /**
+   * 
+   * @param {number} musicId 音乐Id
+   * @description 获取加载歌词 
+   */
+  async loadLyric (musicId) {
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'music',
+        data: {
+          $url: 'getMusicLyric',
+          musicId
+        }
+      })
+      if(res.result.code == 200) {
+        this.setData({
+          lyric: res.result.lrc.lyric
+        })
+      }
+      console.log('loadLyric',this.data.lyric)
+    } catch (error) {
+      
+    }
   },
 
   /**

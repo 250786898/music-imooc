@@ -182,6 +182,9 @@ Component({
             musicProgress: cuttrntProgress,
             movableDistance
           })
+          this.triggerEvent('timeUpdate',{
+            currentTime
+          })
         }
       } 
       

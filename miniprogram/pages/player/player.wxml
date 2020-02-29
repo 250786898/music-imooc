@@ -3,18 +3,26 @@
 <!-- <image src="https://s3.music.126.net/m/s/img/needle.png?702cf6d95f29e2e594f53a3caab50e12" class="needle-img"></image> -->
 
 <view class="player-info">
+  <!-- 歌词组件 -->
+  <lyric class="lyric" show="{{isShowLyric}}" bind:tap="toggleShowLyric" lyric="{{lyric}}" />
+
   <!-- 封面信息 -->
-    <view class="player-disc {{isplaying ? 'playing' : ''}}">
+    <view class="player-disc {{isplaying ? 'playing' : ''}}" hidden="{{isShowLyric}}" bind:tap="toggleShowLyric">
       <image class="player-img disc-animation {{isplaying ? '' : 'disc-pause'}}" src="{{picUrl}}" mode="widthFix" lazy-load="false">  
       </image>
     </view>
    
-   <!-- 歌词组件 -->
-    <lyric class="lyric" />
+
 
     <!-- 进度条 -->
 
-    <music-progress class="progress" bind:onMusicEnd="onNext" bind:onPauseState="onPauseState" bind:onPlayState="onPlayState"/>
+    <music-progress 
+      class="progress" 
+      bind:onMusicEnd="onNext" 
+      bind:onPauseState="onPauseState" 
+      bind:onPlayState="onPlayState"
+      bind:timeUpdate="timeUpdate"
+    />
 
     <!-- 音乐控制面板 -->
     <view class="control">
